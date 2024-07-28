@@ -609,4 +609,21 @@ public class SortedListTest {
         assertThrows(IndexOutOfBoundsException.class, () -> sortedList.getViewIndex(sortedList.size()));
         assertDoesNotThrow(() -> sortedList.getViewIndex(sortedList.size() - 1));
     }
+
+    @Test
+    public void testSortingRespectSourceOrder() {
+        ObservableList<Person> list = FXCollections.observableArrayList();
+
+        Person p1 = new Person("a");
+        Person p2 = new Person("b");
+        Person p3 = new Person("a");
+
+        list.addAll(p2, p1);
+        // list= [p2, p1], sorted= [p1, p2]
+        SortedList<Person> sorted = new SortedList<>(list, Comparator.comparing(Person::name));
+
+        list.add(p3);
+        // list= [p2, p1, p3], sorted= [p1, p3, p2], because p1 and p3 are equal and p3 was added after p1, so it should be after p1
+        assertEquals(Arrays.asList(p1, p3, p2), sorted);
+    }
 }
