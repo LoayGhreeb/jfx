@@ -620,8 +620,7 @@ public class SortedListTest {
 
         list.addAll(p2, p1);
         // list= [p2, p1], sorted= [p1, p2]
-        SortedList<Person> sorted = new SortedList<>(list, Comparator.comparing(Person::name));
-
+        SortedList<Person> sorted = new SortedList<>(list, Comparator.comparing(p -> p.name.get()));
         list.add(p3);
         // list= [p2, p1, p3], sorted= [p1, p3, p2], because p1 and p3 are equal and p3 was added after p1, so it should be after p1
         assertEquals(Arrays.asList(p1, p3, p2), sorted);
