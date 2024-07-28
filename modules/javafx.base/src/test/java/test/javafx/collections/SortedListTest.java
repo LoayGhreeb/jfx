@@ -632,84 +632,73 @@ public class SortedListTest {
         assertSame(sorted.get(2), p2);
     }
 
-       @Test
-   public void testSorting()
-   {
-      // Create a list.
-      ObservableList<TestDto> originalList = FXCollections.observableArrayList() ;
-      originalList.add(new TestDto('C', 2));
-      originalList.add(new TestDto('C', 1));
-      originalList.add(new TestDto('A', 1));
-      // Create a sorted list. The comparator cannot distinguish between the first and the second element
-      SortedList<TestDto> sortedList = new SortedList<>(originalList, Comparator.comparing(TestDto::getValue));
+    @Test
+    public void testSorting() {
+        // Create a list.
+        ObservableList<TestDto> originalList = FXCollections.observableArrayList();
+        originalList.add(new TestDto('C', 2));
+        originalList.add(new TestDto('C', 1));
+        originalList.add(new TestDto('A', 1));
+        // Create a sorted list. The comparator cannot distinguish between the first and the second element
+        SortedList<TestDto> sortedList = new SortedList<>(originalList, Comparator.comparing(TestDto::getValue));
 
-      Assert.assertEquals("C2;C1;A1", toDebugString(originalList));
-      // The comparator result of C1 and C2 is the same, but C2 is in front of C1 in the origin list
-      Assert.assertEquals("A1;C2;C1", toDebugString(sortedList));
+        assertEquals("C2;C1;A1", toDebugString(originalList));
+        // The comparator result of C1 and C2 is the same, but C2 is in front of C1 in the origin list
+        assertEquals("A1;C2;C1", toDebugString(sortedList));
 
-      // We update the value of the second element of the original list with a copy of the same value
-      originalList.set(1, new TestDto('C', 1));
-      Assert.assertEquals("C2;C1;A1", toDebugString(originalList));
+        // We update the value of the second element of the original list with a copy of the same value
+        originalList.set(1, new TestDto('C', 1));
+        assertEquals("C2;C1;A1", toDebugString(originalList));
 
-      // HERE COMES THE ERROR:
-      // We expect the sorted list to be identical to the status above
-      // but instead of that the two results C2 and C1 are mixed
-      Assert.assertEquals("A1;C2;C1", toDebugString(sortedList)); // In JavaFX 16 & 17.0.6 "A1;C1;C2" is the result
-   }
+        // HERE COMES THE ERROR:
+        // We expect the sorted list to be identical to the status above
+        // but instead of that the two results C2 and C1 are mixed
+        assertEquals("A1;C2;C1", toDebugString(sortedList)); // In JavaFX 16 & 17.0.6 "A1;C1;C2" is the result
+    }
 
-   private String toDebugString(List<TestDto> testDtos)
-   {
-      return testDtos.stream()
-                     .map(TestDto::toString)
-                     .collect(Collectors.joining(";"));
-   }
+    private String toDebugString(List<TestDto> testDtos) {
+        return testDtos.stream()
+                       .map(TestDto::toString)
+                       .collect(Collectors.joining(";"));
+    }
 
-   private static class TestDto
-   {
-      private final Character value;
-      private final int otherIdentifier;
+    private static class TestDto {
+        private final Character value;
+        private final int otherIdentifier;
 
-      TestDto(Character value, int otherIdentifier)
-      {
-         this.value = value;
-         this.otherIdentifier = otherIdentifier;
-      }
+        TestDto(Character value, int otherIdentifier) {
+            this.value = value;
+            this.otherIdentifier = otherIdentifier;
+        }
 
-      public Character getValue()
-      {
-         return value;
-      }
+        public Character getValue() {
+            return value;
+        }
 
-      public int getOtherIdentifier()
-      {
-         return otherIdentifier;
-      }
+        public int getOtherIdentifier() {
+            return otherIdentifier;
+        }
 
-      @Override
-      public boolean equals(Object o)
-      {
-         if (this == o)
-         {
-            return true;
-         }
-         if (o == null || getClass() != o.getClass())
-         {
-            return false;
-         }
-         TestDto testDto = (TestDto) o;
-         return value.equals(testDto.value);
-      }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            TestDto testDto = (TestDto) o;
+            return value.equals(testDto.value);
+        }
 
-      @Override
-      public int hashCode()
-      {
-         return Objects.hash(value);
-      }
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
+        }
 
-      @Override
-      public String toString()
-      {
-         return value.toString() + otherIdentifier;
-      }
-   }
+        @Override
+        public String toString() {
+            return value.toString() + otherIdentifier;
+        }
+    }
 }
